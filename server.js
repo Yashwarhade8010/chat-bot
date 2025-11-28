@@ -58,7 +58,10 @@ app.post("/api/chat/:message", async (req, res) => {
         }
       },
     });
-    await play(stream);
+    const result = await play(stream);
+
+    return res.send(result);
+    
   } catch (err) {
     console.log(err);
   }
