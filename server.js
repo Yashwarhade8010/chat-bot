@@ -14,8 +14,8 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.post("/api/chat", async (req, res) => {
-  const { message } = req.body;
+app.post("/api/chat/:message", async (req, res) => {
+  const message = req.params.message;
   try {
     const response = await axios.post(
       "https://api.groq.com/openai/v1/chat/completions",
@@ -24,8 +24,7 @@ app.post("/api/chat", async (req, res) => {
         messages: [
           {
             role: "system",
-            content:
-              "Act as a indian person who reply normaly.",
+            content: "Act as a indian person who reply normaly.",
           },
           { role: "user", content: message },
         ],
@@ -39,27 +38,27 @@ app.post("/api/chat", async (req, res) => {
     );
     const aireply = response.data.choices[0].message.content;
 
-
-   const audio = await elevenlabs.textToSpeech.convert('JBFqnCBsd6RMkjVDRZzb', {
+    const audio = await elevenlabs.textToSpeech.convert(
+      "JBFqnCBsd6RMkjVDRZzb",
+      {
         text: aireply,
-        modelId: 'eleven_multilingual_v2',
-        outputFormat: 'mp3_44100_128',
-      });
+        modelId: "eleven_multilingual_v2",
+        outputFormat: "mp3_44100_128",
+      }
+    );
 
-      const reader = audio.getReader();
-      const stream = new Readable({
-        async read() {
-          const { done, value } = await reader.read();
-          if (done) {
-            this.push(null);
-          } else {
-            this.push(value);
-          }
-        },
-      });
-      await play(stream);
-    
-
+    const reader = audio.getReader();
+    const stream = new Readable({
+      async read() {
+        const { done, value } = await reader.read();
+        if (done) {
+          this.push(null);
+        } else {
+          this.push(value);
+        }
+      },
+    });
+    await play(stream);
   } catch (err) {
     console.log(err);
   }
