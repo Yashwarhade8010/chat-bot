@@ -14,8 +14,8 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.post("/api/chat/:message", async (req, res) => {
-  const message = req.params.message;
+app.post("/api/chat/", async (req, res) => {
+  const { message } = req.body;
   try {
     const response = await axios.post(
       "https://api.groq.com/openai/v1/chat/completions",
@@ -60,8 +60,8 @@ app.post("/api/chat/:message", async (req, res) => {
     });
     const result = await play(stream);
 
+    res.send(aireply);
     return res.send(result);
-    
   } catch (err) {
     console.log(err);
   }
