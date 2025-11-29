@@ -22,7 +22,7 @@ app.get("/", async (req, res) => {
   return res.status(400).send({ message: "Unverified" });
 });
 
-app.post("/api/chat/", async (req, res) => {
+app.post("/", async (req, res) => {
   const body = req.body;
 
   try {
