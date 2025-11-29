@@ -38,30 +38,7 @@ app.post("/api/chat/", async (req, res) => {
     );
     const aireply = response.data.choices[0].message.content;
 
-    const audio = await elevenlabs.textToSpeech.convert(
-      "JBFqnCBsd6RMkjVDRZzb",
-      {
-        text: aireply,
-        modelId: "eleven_multilingual_v2",
-        outputFormat: "mp3_44100_128",
-      }
-    );
-
-    const reader = audio.getReader();
-    const stream = new Readable({
-      async read() {
-        const { done, value } = await reader.read();
-        if (done) {
-          this.push(null);
-        } else {
-          this.push(value);
-        }
-      },
-    });
-    const result = await play(stream);
-
-    res.send(aireply);
-    return res.send(result);
+    return res.send(aireply);
   } catch (err) {
     console.log(err);
   }
